@@ -1,0 +1,20 @@
+version: "3"
+services:
+    app:
+        image: traefik
+        container_name: proxy
+        networks:
+            - gateway
+        ports:
+            - "80:80" # HTTP port
+            - "8080:8080" # Web UI (enabled by --api.insecure=true)
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro # Listen to Docker events
+            - ./traefik.toml:/traefik.toml:ro # Main configuration
+        labels:
+            - "traefik.enable=true"
+        restart: unless-stopped
+
+networks:
+    gateway:
+        name: gateway

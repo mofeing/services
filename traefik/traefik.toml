@@ -1,0 +1,17 @@
+[providers.docker]
+	endpoint="unix:///var/run/docker.sock"
+	exposedByDefault=false
+	network="gateway"
+
+[entryPoints]
+	[entryPoints.http]
+		address=":80"
+
+[api]
+	insecure=true
+	dashboard=true
+
+[log]
+	level="NOTICE"
+
+[accessLog]
