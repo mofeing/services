@@ -1,0 +1,30 @@
+version: "3"
+services:
+    app:
+        image: jupyter/minimal-notebook
+        container_name: jupyter
+        command: start.sh jupyter lab --LabApp.token=''
+        networks:
+            - gateway
+        environment:
+            - JUPYTER_ENABLE_LAB=yes
+        volumes:
+            - ${HOME}:/home/jovyan/work
+            - app:/opt/conda/share/jupyter
+            - settings:/home/jovyan/.jupyter
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.jupyter.entrypoints=http"
+            - "traefik.http.routers.jupyter.rule=Host(`jupyter.localhost`)"
+            - "traefik.http.routers.jupyter.service=jupyter"
+            - "traefik.http.services.jupyter.loadbalancer.server.port=8888"
+        restart: unless-stopped
+
+networks:
+    gateway:
+        name: gateway
+        external: true
+
+volumes:
+    app:
+    settings:
